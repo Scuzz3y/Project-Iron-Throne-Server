@@ -1,0 +1,27 @@
+// Wrapper for each token-type
+
+include "netinterface.fbs";
+include "config.fbs";
+include "action.fbs";
+include "actionResponse.fbs";
+
+namespace anomaly;
+table API {
+    // sessionId = "-1" means there was an error in the transport module
+    sessionId:string;
+
+    // InitToken
+    // sessionId = ""
+    uuid:string;
+    hostname:string;
+	interfaces:[NetInterface];
+	config:Config;
+    
+    // CommandToken
+    actions:[Action];
+
+    // ResponseToken
+    responses:[ActionResponse];
+}
+
+root_type API;

@@ -1,0 +1,7 @@
+namespace anomaly;
+
+table NetInterface {
+	name:string;
+	macAddr:string;
+	ipAddrs:[string];
+}

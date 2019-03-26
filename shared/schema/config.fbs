@@ -1,0 +1,8 @@
+namespace anomaly;
+
+table Config {
+	interval:int;
+	intervalDelta:int;
+	agentVersion:string;
+	servers:[string];
+}

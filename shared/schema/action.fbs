@@ -1,0 +1,35 @@
+// Actions
+include "config.fbs";
+
+namespace anomaly;
+enum ActionType:ubyte {
+	Config = 0,         // Sets agent config
+	Exec = 1,           // Run a command
+	Spawn = 2,          // Run a command, disown child process, and don't wait for output
+	TimedExec = 3,      // Run a command at a given time
+	TimedSpawn = 4,     // Spawn process at a given time (combination of 2 and 3)
+	Upload = 5,         // Upload file to the remote system
+	Download = 6,       // Download file from remote system
+	Gather = 7,         // Gather and report facts again
+	Reset = 255         // Force agent to reinitialize
+}
+
+table Action {
+	actionId:string;
+	actionType:ActionType;
+
+    // ActionType = 0
+    config:Config;
+
+    // ActionType = 1 / 2
+	command:string;
+	args:[string];
+
+    // ActionType = 3 / 4
+    activateTime:float;
+    currentTime:float;
+
+    // ActionType = 5
+    remotePath:string; // ActionType = 6 uses this
+    file:[byte];
+}
