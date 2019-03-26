@@ -1,2 +1,3 @@
 # Ignore flatbuffer library
 lib/
+.vscode/
