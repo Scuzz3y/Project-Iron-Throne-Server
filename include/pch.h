@@ -6,5 +6,6 @@
 
 // Third party libs
 #include "flatbuffers/flatbuffers.h"
+#include "anomaly_api_generated.h"
 
 #endif // PCH_H
