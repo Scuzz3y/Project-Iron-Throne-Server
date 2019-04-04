@@ -1,3 +1,5 @@
-# Ignore flatbuffer library
-lib/
 .vscode/
+lib/
+bin/
+build/
+*.o
