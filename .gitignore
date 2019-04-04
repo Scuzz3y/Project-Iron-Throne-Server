@@ -1,5 +1,6 @@
 .vscode/
 lib/
-bin/
-build/
+bin/**
+build/**
+!/**/.gitkeep
 *.o
