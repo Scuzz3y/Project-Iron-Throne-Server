@@ -3,10 +3,11 @@ project(LightBringer)
 
 set(SOURCE_FILES main.cpp lightBringer.cpp)
 
+# Put Modules Here
 add_subdirectory(modules/blackIce)
 
-add_executable(main ${SOURCE_FILES})
+add_executable(iron-throne ${SOURCE_FILES})
 
-target_link_libraries(main blackIce)
+target_link_libraries(iron-throne blackIce)
 
-install(TARGETS main DESTINATION ${SERVER_BIN_DIR})
+install(TARGETS iron-throne DESTINATION ${IRON_THRONE_INSTALL_BIN_DIR})

@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "lightBringer/lightBringer.h"
-#include "blackIce/blackIce.h"
+#include "lightBringer.h"
+#include "blackIce.h"
 
 int main(){
 
