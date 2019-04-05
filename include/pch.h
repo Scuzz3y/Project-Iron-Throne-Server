@@ -1,10 +1,7 @@
-#ifndef PCH_H 
+#ifndef PCH_H
 #define PCH_H
 
-// System libs
-#include <iostream>
-#include <queue>
-
+// C System Headers
 // System Networking Libs
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -13,8 +10,13 @@
 #include <unistd.h>
 #include <string.h>
 
-// Third party libs
-//#include "flatbuffers/flatbuffers.h"
-//#include "anomaly_api_generated.h"
+// C++ System Headers
+#include <iostream>
+#include <queue>
 
-#endif // PCH_H
+
+// Third party libs
+// #include "flatbuffers/flatbuffers.h"
+// #include "anomaly_api_generated.h"
+
+#endif  // PCH_H
