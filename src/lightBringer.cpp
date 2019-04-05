@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "lightBringer.h"
-//#include "blackIce/blackIce.h"
-//#include "anomaly_api_generated.h"
+#include "blackIce.h"
 
-void lightBringer(void) {
-    std::cout << "LIGHTBRINGER" << std::endl;
+LightBringer::LightBringer() {
+
+}
+
+void LightBringer::BlackIceTesting() {
+    BlackIce blackIce;
+    blackIce.Start();
 }

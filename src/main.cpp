@@ -5,8 +5,9 @@
 int main(){
 
     std::cout << "Hello from Main!" << std::endl;
-    lightBringer();
-    blackIce_test();
+    LightBringer bringit;
+    bringit.BlackIceTesting();
+    
 
     return 0;
 }
