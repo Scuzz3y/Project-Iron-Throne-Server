@@ -15,6 +15,7 @@
 #include <queue>
 #include <memory>
 #include <thread>
+#include <chrono>
 
 // Third party libs
 // #include "flatbuffers/flatbuffers.h"
