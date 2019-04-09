@@ -3,22 +3,23 @@
 
 #include "anomaly_api_generated.h"
 
-typedef std::queue<std::unique_ptr<anomaly::ActionResponseT>> ActionResponseQueue;
-typedef std::unique_ptr<anomaly::ActionResponseT> ActionResponsePtr;
+typedef std::unique_ptr<anomaly::APIT> APITPtr;
 
-typedef std::queue<std::unique_ptr<anomaly::ActionT>> ActionQueue;
-typedef std::unique_ptr<anomaly::ActionT> ActionPtr;
+typedef std::queue<APITPtr> ActionResponseQueue;
+typedef std::queue<APITPtr> ActionQueue;
 
 class LightBringer {
  public:
     LightBringer();
 
-    ActionResponsePtr PopActionResponse(void);
-    void PushActionResponse(ActionResponsePtr actionResponse);
-    ActionPtr PopAction(void);
-    void PushAction(ActionPtr action);
+    APITPtr PopActionResponse(void);
+    void PushActionResponse(APITPtr actionResponse);
+    APITPtr PopAction(void);
+    void PushAction(APITPtr action);
 
+    // Testing Functions
     void BlackIceTesting(void);
+    void ArsenalHttpTesting(void);
 
  private:
     std::vector<std::string> upstreamServers;
