@@ -14,8 +14,10 @@ class LightBringer {
 
     APITPtr PopActionResponse(void);
     void PushActionResponse(APITPtr actionResponse);
+    int GetActionResponseSize(void);
     APITPtr PopAction(void);
     void PushAction(APITPtr action);
+    int GetActionSize(void);
 
     // Testing Functions
     void BlackIceTesting(void);

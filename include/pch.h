@@ -16,6 +16,7 @@
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <sstream>
 
 // Third party libs
 // #include "flatbuffers/flatbuffers.h"

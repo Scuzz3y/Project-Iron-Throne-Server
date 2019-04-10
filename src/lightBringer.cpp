@@ -13,7 +13,11 @@ APITPtr LightBringer::PopActionResponse() {
 }
 
 void LightBringer::PushActionResponse(APITPtr actionResponse) {
-    this->actionResponseQueue.push(std::move(actionResponse));
+    this->actionResponseQueue.push(actionResponse);
+}
+
+int LightBringer::GetActionResponseSize() {
+    return static_cast<int>(this->actionResponseQueue.size());
 }
 
 APITPtr LightBringer::PopAction(void) {
@@ -24,15 +28,19 @@ APITPtr LightBringer::PopAction(void) {
 }
 
 void LightBringer::PushAction(APITPtr action) {
-    this->actionQueue.push(std::move(action));
+    this->actionQueue.push(action);
+}
+
+int LightBringer::GetActionSize(void) {
+    return static_cast<int>(this->actionQueue.size());
 }
 
 void LightBringer::BlackIceTesting() {
     BlackIce blackIce(this);
-    blackIce.Start();
+    blackIce.Init();
 }
 
 void LightBringer::ArsenalHttpTesting() {
-    ArsenalHttp arsenal;
+    ArsenalHttp arsenal(this);
     arsenal.Init();
 }
