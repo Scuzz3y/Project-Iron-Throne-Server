@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
+project(iron-throne-server)
 
 set(CMAKE_CXX_STANDARD 17)
 set(GCC_GENERAL_COMPILATION_FLAGS "-std=c++17 -g -pthread")
@@ -6,7 +7,7 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -pedantic \
 -pedantic-errors -Wextra -Wcast-align \
 -Wcast-qual -Wconversion \
 -Wdisabled-optimization \
--Werror -Wformat=2 \
+-Wformat=2 \
 -Wformat-nonliteral -Wformat-security \
 -Wformat-y2k \
 -Wimport -Winit-self -Winline -Winvalid-pch \
@@ -16,7 +17,6 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -pedantic \
 -Wredundant-decls \
 -Wshadow -Wstack-protector \
 -Wstrict-aliasing=2 -Wswitch-default \
--Wswitch-enum \
 -Wunreachable-code -Wunused \
 -Wunused-parameter \
 -Wvariadic-macros \
@@ -30,6 +30,14 @@ set(IRON_THRONE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
 set(IRON_THRONE_LIBS_DIR ${PROJECT_SOURCE_DIR}/libs)
 set(IRON_THRONE_PUPPET_MODULE_DIR ${PROJECT_SOURCE_DIR}/src/modules/puppet)
 set(IRON_THRONE_MASTER_MODULE_DIR ${PROJECT_SOURCE_DIR}/src/modules/master)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package( Boost 1.65.1 COMPONENTS system thread REQUIRED )
+
+add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
+
 
 # Individual Puppet Module Include Dirs
 set(BLACKICE_HEADER_DIR ${IRON_THRONE_PUPPET_MODULE_DIR}/blackIce)

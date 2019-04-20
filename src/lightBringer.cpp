@@ -13,7 +13,7 @@ APITPtr LightBringer::PopActionResponse() {
 }
 
 void LightBringer::PushActionResponse(APITPtr actionResponse) {
-    this->actionResponseQueue.push(actionResponse);
+    this->actionResponseQueue.push(std::move(actionResponse));
 }
 
 int LightBringer::GetActionResponseSize() {
@@ -28,7 +28,7 @@ APITPtr LightBringer::PopAction(void) {
 }
 
 void LightBringer::PushAction(APITPtr action) {
-    this->actionQueue.push(action);
+    this->actionQueue.push(std::move(action));
 }
 
 int LightBringer::GetActionSize(void) {

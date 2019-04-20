@@ -6,9 +6,10 @@
 int main() {
     std::cout << "Hello from Main!" << std::endl;
     LightBringer bringit;
-    bringit.BlackIceTesting();
+    std::thread(&LightBringer::BlackIceTesting, &bringit).detach();
+    //bringit.BlackIceTesting();
     bringit.ArsenalHttpTesting();
 
     pause();
-    return 0;
+    return 0; 
 }
