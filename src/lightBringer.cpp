@@ -6,14 +6,24 @@
 LightBringer::LightBringer() {}
 
 APITPtr LightBringer::PopActionResponse() {
-    APITPtr temp = std::move(this->actionResponseQueue.front());
+    APITPtr temp;
+
+    this->actionResponseQueueLock.lock();
+
+    temp = std::move(this->actionResponseQueue.front());
     this->actionResponseQueue.pop();
+
+    this->actionResponseQueueLock.unlock();
 
     return std::move(temp);
 }
 
 void LightBringer::PushActionResponse(APITPtr actionResponse) {
+    this->actionResponseQueueLock.lock();
+
     this->actionResponseQueue.push(std::move(actionResponse));
+
+    this->actionResponseQueueLock.unlock();
 }
 
 int LightBringer::GetActionResponseSize() {
@@ -21,14 +31,24 @@ int LightBringer::GetActionResponseSize() {
 }
 
 APITPtr LightBringer::PopAction(void) {
-    APITPtr temp = std::move(this->actionQueue.front());
+    APITPtr temp;
+
+    this->actionQueueLock.lock();
+
+    temp = std::move(this->actionQueue.front());
     this->actionQueue.pop();
+
+    this->actionQueueLock.unlock();
 
     return std::move(temp);
 }
 
 void LightBringer::PushAction(APITPtr action) {
+    this->actionQueueLock.lock();
+
     this->actionQueue.push(std::move(action));
+
+    this->actionQueueLock.unlock();
 }
 
 int LightBringer::GetActionSize(void) {

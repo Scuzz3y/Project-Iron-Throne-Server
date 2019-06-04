@@ -27,6 +27,10 @@ class LightBringer {
     std::vector<std::string> upstreamServers;
     ActionResponseQueue actionResponseQueue;  // Responses received from bot
     ActionQueue actionQueue;  // Actions to send bot
+
+    // Mutexes
+    std::mutex actionResponseQueueLock;
+    std::mutex actionQueueLock;
 };
 
 #endif  // LIGHTBRINGER_H
