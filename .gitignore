@@ -2,6 +2,5 @@
 libs/
 bin/**
 build/**
-src/modules/puppet/**
 !/**/.gitkeep
 *.o
