@@ -1,5 +1,5 @@
 # Project-Iron-Throne-Server-Master
-Master modules for Project Iron Throne Server.  These are meant to be kept private until further notice.
+Master modules for Project Iron Throne Server.
 
 ## Instructions
 1) Clone this repo into `Project-Iron-Throne-Server/src/modules/master`
