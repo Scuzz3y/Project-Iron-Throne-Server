@@ -21,6 +21,7 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -pedantic \
 -Wunused-parameter \
 -Wvariadic-macros \
 -Wwrite-strings")
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS} ${GCC_GENERAL_COMPILATION_FLAGS}" )
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
@@ -30,13 +31,6 @@ set(IRON_THRONE_INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
 set(IRON_THRONE_LIBS_DIR ${PROJECT_SOURCE_DIR}/libs)
 set(IRON_THRONE_PUPPET_MODULE_DIR ${PROJECT_SOURCE_DIR}/src/modules/puppet)
 set(IRON_THRONE_MASTER_MODULE_DIR ${PROJECT_SOURCE_DIR}/src/modules/master)
-
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package( Boost 1.65.1 COMPONENTS system thread REQUIRED )
-
-add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
 
 
 # Individual Puppet Module Include Dirs
