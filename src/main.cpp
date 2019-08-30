@@ -4,12 +4,19 @@
 #include "arsenalHttp.h"
 
 int main() {
-    std::cout << "Hello from Main!" << std::endl;
+    // Initialize Manager Module
     LightBringer bringit;
-    std::thread(&LightBringer::BlackIceTesting, &bringit).detach();
-    //bringit.BlackIceTesting();
-    bringit.ArsenalHttpTesting();
 
-    pause();
+    // Initialize Puppet Modules
+    BlackIce blackIce(&bringit);
+    std::thread(&BlackIce::Init, &blackIce).detach();
+    
+    // Initialize Master Modules
+    ArsenalHttp arsenal(&bringit);
+    std::thread(&ArsenalHttp::Start, &arsenal).detach();
+
+    // Call CLI
+    bringit.InitCli();
+
     return 0; 
 }

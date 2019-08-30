@@ -12,16 +12,14 @@ class LightBringer {
  public:
     LightBringer();
 
+    void InitCli();
+
     APITPtr PopActionResponse(void);
     void PushActionResponse(APITPtr actionResponse);
     int GetActionResponseSize(void);
     APITPtr PopAction(void);
     void PushAction(APITPtr action);
     int GetActionSize(void);
-
-    // Testing Functions
-    void BlackIceTesting(void);
-    void ArsenalHttpTesting(void);
 
  private:
     std::vector<std::string> upstreamServers;

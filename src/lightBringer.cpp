@@ -5,6 +5,12 @@
 
 LightBringer::LightBringer() {}
 
+void LightBringer::InitCli() {
+    std::cout << "Stub CLI Here:" << std::endl;
+
+    pause();
+}
+
 APITPtr LightBringer::PopActionResponse() {
     APITPtr temp;
 
@@ -15,7 +21,7 @@ APITPtr LightBringer::PopActionResponse() {
 
     this->actionResponseQueueLock.unlock();
 
-    return std::move(temp);
+    return temp;
 }
 
 void LightBringer::PushActionResponse(APITPtr actionResponse) {
@@ -27,7 +33,13 @@ void LightBringer::PushActionResponse(APITPtr actionResponse) {
 }
 
 int LightBringer::GetActionResponseSize() {
-    return static_cast<int>(this->actionResponseQueue.size());
+    this->actionResponseQueueLock.lock();
+
+    int size = static_cast<int>(this->actionResponseQueue.size());
+
+    this->actionResponseQueueLock.unlock();
+
+    return size;
 }
 
 APITPtr LightBringer::PopAction(void) {
@@ -40,7 +52,7 @@ APITPtr LightBringer::PopAction(void) {
 
     this->actionQueueLock.unlock();
 
-    return std::move(temp);
+    return temp;
 }
 
 void LightBringer::PushAction(APITPtr action) {
@@ -52,15 +64,11 @@ void LightBringer::PushAction(APITPtr action) {
 }
 
 int LightBringer::GetActionSize(void) {
-    return static_cast<int>(this->actionQueue.size());
-}
+    this->actionQueueLock.lock();
 
-void LightBringer::BlackIceTesting() {
-    BlackIce blackIce(this);
-    blackIce.Init();
-}
+    int size = static_cast<int>(this->actionQueue.size());
 
-void LightBringer::ArsenalHttpTesting() {
-    ArsenalHttp arsenal(this);
-    arsenal.Init();
+    this->actionQueueLock.unlock();
+
+    return size;
 }
