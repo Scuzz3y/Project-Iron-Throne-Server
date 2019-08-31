@@ -1,5 +1,4 @@
 .vscode/
-libs/
 bin/**
 build/**
 !/**/.gitkeep
