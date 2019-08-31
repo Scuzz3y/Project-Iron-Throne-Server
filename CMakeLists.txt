@@ -52,3 +52,6 @@ include_directories(${PROJECT_SOURCE_DIR}/shared/schema-include)
 include_directories(${IRON_THRONE_LIBS_DIR}/flatbuffers/include)
 
 add_subdirectory(src)
+
+# Compile BlackIce Test Client
+add_subdirectory(testing/blackIce)
