@@ -3,8 +3,14 @@
 #include <string>
 
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include "anomaly_api_generated.h"
+#include "udp_frag_generated.h"
+
+#define MAX_UDP_FRAG_SIZE 1000
 
 using anomaly::APIT;
 
@@ -20,11 +26,7 @@ std::string GetRandString(int len) {
     return rand_str;
 }
 
-APIT InitUdpSocket() {
-
-}
-
-APIT InitBeacon(std::vector<std::string> servers) {
+APIT InitBeacon(std::string server) {
     APIT initBeacon;
 
     initBeacon.sessionId = ""; // Blank when initializing
@@ -35,13 +37,51 @@ APIT InitBeacon(std::vector<std::string> servers) {
     initBeacon.config->agentVersion = "BlackIce-Test-Client";
     initBeacon.config->interval = 5;
     initBeacon.config->intervalDelta = 1;
-    initBeacon.config->servers = servers;
+    initBeacon.config->servers = { server };
 
     return initBeacon;
 }
 
-void SendUdpBeacon(int sock, APIT beacon) {
+void SendUdpBeacon(int sock, sockaddr_in serverAddr, APIT beacon) {
+    flatbuffers::FlatBufferBuilder beaconBuilder;
+	flatbuffers::FlatBufferBuilder udpSendBuilder;
+    UdpFragT udpSendFrag;
+    flatbuffers::Offset<UdpFrag> tempUdpFrag;
+    int ret;
 
+    beaconBuilder.Finish(CreateAPI(beaconBuilder, &beacon));
+
+    uint8_t *beacPtr = beaconBuilder.GetBufferPointer();
+    int beacSize = beaconBuilder.GetSize();
+
+    std::vector<uint8_t> rawBeacon(beacPtr, beacPtr + beacSize);
+
+    int i = 0;
+	int offset = 0;
+	while (static_cast<size_t>(offset + MAX_UDP_FRAG_SIZE) <= rawBeacon.size()) {
+		udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.begin() + offset + MAX_UDP_FRAG_SIZE);
+		i++;
+		offset = i * MAX_UDP_FRAG_SIZE;
+
+		tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
+		udpSendBuilder.Finish(tempUdpFrag);
+
+		std::cout << "UDP Buffer Size: " << udpSendBuilder.GetSize() << std::endl;
+
+        ret = sendto(sock, udpSendBuilder.GetBufferPointer(), udpSendBuilder.GetSize(), 0, (sockaddr *) &serverAddr, sizeof(serverAddr));
+
+		udpSendFrag.sequenceNum++;
+		udpSendBuilder.Clear();
+	}
+	int remain = rawBeacon.size() % MAX_UDP_FRAG_SIZE;
+	if (remain > 0) {
+		udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.end());
+
+		tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
+		udpSendBuilder.Finish(tempUdpFrag);
+
+		ret = sendto(sock, udpSendBuilder.GetBufferPointer(), udpSendBuilder.GetSize(), 0, (sockaddr *) &serverAddr, sizeof(serverAddr));
+	}
 }
 
 int main() {
@@ -51,33 +91,29 @@ int main() {
     struct sockaddr_in servAddr;
 
     // Initialize C2 Server Info
-    std::vector<std::string> servers = {"127.0.0.1"};
+    std::string server = "127.0.0.1";
     int serverPort = 20000;
 
-    APIT beacon = InitBeacon(servers);
-
     // Initialize UDP Socket
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+    sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0) {
-        std::err << "Error creating socket: " << sock << std::endl;
+        std::cerr << "Error creating socket: " << sock << std::endl;
         return 1;
     }
+    std::cout << "Successfully create socket." << std::endl;
 
-    memset((char *) servAddr, 0, sizeof(servaddr));
+    bzero((char *) &servAddr, sizeof(servAddr));
     servAddr.sin_family = AF_INET;
     servAddr.sin_port = htons(serverPort);
-    servAddr.sin_addr.s_addr = INADDR_ANY;
+    servAddr.sin_addr.s_addr = inet_addr(server.c_str());
 
-    ret = connect(sock, (struct sockaddr *) &servAddr, sizeof(servAddr));
-    if (ret < 0) {
-        std::err << "Error connecting to server: " << ret << std::endl;
-        return 1;
-    }
+    // Create Initialization Beacon
+    APIT beacon = InitBeacon(server);
 
-    do {
-        SendUdpBeacon(sock, beacon);
+    //do {
+        SendUdpBeacon(sock, servAddr, std::move(beacon));
 
-    } while(1);
+    //} while(1);
 
     return 0;
 }
