@@ -54,4 +54,4 @@ include_directories(${IRON_THRONE_LIBS_DIR}/flatbuffers/include)
 add_subdirectory(src)
 
 # Compile BlackIce Test Client
-add_subdirectory(testing/blackIce)
+add_subdirectory(tests/blackIce-Client)

