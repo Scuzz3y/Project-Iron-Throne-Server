@@ -8,7 +8,7 @@ typedef std::unique_ptr<std::vector<uint8_t>> PayloadPtr;
 typedef std::shared_ptr<std::vector<PayloadPtr>> VecToPayloadVecPtr;
 
 class BlackIce {
- public:
+public:
     BlackIce(void);
     explicit BlackIce(LightBringer *man);
     void Start(void);
@@ -17,9 +17,9 @@ class BlackIce {
 
     void QueueTest(void);
 
- private:
+private:
     class ClientInfo {
-     public:
+    public:
         in_port_t sin_port;
         uint32_t s_addr;
         VecToPayloadVecPtr payloads;

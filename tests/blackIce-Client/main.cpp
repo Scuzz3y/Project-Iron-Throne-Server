@@ -17,7 +17,7 @@ using anomaly::APIT;
 
 std::string GetRandString(int len) {
     std::mt19937 generator{std::random_device{}()};
-   //modify range according to your need "A-Z","a-z" or "0-9" or whatever you need.
+    //modify range according to your need "A-Z","a-z" or "0-9" or whatever you need.
     std::uniform_int_distribution<int> distribution{'a', 'z'};
 
     std::string rand_str(len, '\0');
@@ -45,7 +45,7 @@ APIT InitBeacon(std::string server) {
 
 void SendUdpBeacon(int sock, sockaddr_in serverAddr, APIT beacon) {
     flatbuffers::FlatBufferBuilder beaconBuilder;
-	flatbuffers::FlatBufferBuilder udpSendBuilder;
+    flatbuffers::FlatBufferBuilder udpSendBuilder;
     UdpFragT udpSendFrag;
     flatbuffers::Offset<UdpFrag> tempUdpFrag;
     int ret;
@@ -58,31 +58,31 @@ void SendUdpBeacon(int sock, sockaddr_in serverAddr, APIT beacon) {
     std::vector<uint8_t> rawBeacon(beacPtr, beacPtr + beacSize);
 
     int i = 0;
-	int offset = 0;
-	while (static_cast<size_t>(offset + MAX_UDP_FRAG_SIZE) <= rawBeacon.size()) {
-		udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.begin() + offset + MAX_UDP_FRAG_SIZE);
-		i++;
-		offset = i * MAX_UDP_FRAG_SIZE;
+    int offset = 0;
+    while (static_cast<size_t>(offset + MAX_UDP_FRAG_SIZE) <= rawBeacon.size()) {
+        udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.begin() + offset + MAX_UDP_FRAG_SIZE);
+        i++;
+        offset = i * MAX_UDP_FRAG_SIZE;
 
-		tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
-		udpSendBuilder.Finish(tempUdpFrag);
+        tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
+        udpSendBuilder.Finish(tempUdpFrag);
 
-		std::cout << "UDP Buffer Size: " << udpSendBuilder.GetSize() << std::endl;
+        std::cout << "UDP Buffer Size: " << udpSendBuilder.GetSize() << std::endl;
 
         ret = sendto(sock, udpSendBuilder.GetBufferPointer(), udpSendBuilder.GetSize(), 0, (sockaddr *) &serverAddr, sizeof(serverAddr));
 
-		udpSendFrag.sequenceNum++;
-		udpSendBuilder.Clear();
-	}
-	int remain = rawBeacon.size() % MAX_UDP_FRAG_SIZE;
-	if (remain > 0) {
-		udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.end());
+        udpSendFrag.sequenceNum++;
+        udpSendBuilder.Clear();
+    }
+    int remain = rawBeacon.size() % MAX_UDP_FRAG_SIZE;
+    if (remain > 0) {
+        udpSendFrag.data.assign(rawBeacon.begin() + offset, rawBeacon.end());
 
-		tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
-		udpSendBuilder.Finish(tempUdpFrag);
+        tempUdpFrag = CreateUdpFrag(udpSendBuilder, &udpSendFrag);
+        udpSendBuilder.Finish(tempUdpFrag);
 
-		ret = sendto(sock, udpSendBuilder.GetBufferPointer(), udpSendBuilder.GetSize(), 0, (sockaddr *) &serverAddr, sizeof(serverAddr));
-	}
+        ret = sendto(sock, udpSendBuilder.GetBufferPointer(), udpSendBuilder.GetSize(), 0, (sockaddr *) &serverAddr, sizeof(serverAddr));
+    }
 }
 
 int main() {
