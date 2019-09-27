@@ -92,7 +92,7 @@ void ArsenalHttp::Start() {
         }
 
         if (jFromTeamServer["error"] == true) {
-            std::cout << "ArsenalHttp::Start: Team Server responded with an error." << std::endl;
+            std::cout << "ArsenalHttp::Start: Team Server responded with an error: " << jFromTeamServer["description"] << std::endl;
             goto Cleanup;
         }
 
